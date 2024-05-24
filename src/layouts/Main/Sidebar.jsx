@@ -11,6 +11,7 @@ import { FaCalendarDays } from "react-icons/fa6";
 import { IoChatbubblesSharp } from "react-icons/io5";
 import { RiCurrencyLine } from "react-icons/ri";
 import { RiExchangeDollarLine } from "react-icons/ri";
+import { HiOutlineBars4 } from "react-icons/hi2";
 import { CiUser } from "react-icons/ci";
 import Swal from "sweetalert2";
 const Sidebar = () => {
@@ -60,7 +61,7 @@ const Sidebar = () => {
                 </div>
               </NavLink>
             </li>
-            <NavLink
+            {/* <NavLink
               to="/chats"
               className={({ isActive, isPending }) =>
                 isPending
@@ -74,7 +75,7 @@ const Sidebar = () => {
               <IoChatbubblesSharp width={25} height={25} />
                 Chats
               </div>
-            </NavLink>
+            </NavLink> */}
 
             <NavLink
               to="/earning"
@@ -113,7 +114,7 @@ const Sidebar = () => {
            
 
             <NavLink
-              to="/subscribers"
+              to="/provider"
               className={({ isActive, isPending }) =>
                 isPending
                   ? "flex text-[white] gap-2 cursor-pointer items-center text-[18px] font-medium p-[20px] bg-[#281F1F] m-[16px] rounded-lg"
@@ -123,12 +124,28 @@ const Sidebar = () => {
               }
             >
               <div className="flex justify-start items-center gap-2">
-              <CiUser width={25} height={25} />
-                Subscribers
+              <HiOutlineUsers width={25} height={25} />
+                Provider
               </div>
             </NavLink>
             <NavLink
-              to="/subscriptions"
+              to="/categories"
+              className={({ isActive, isPending }) =>
+                isPending
+                  ? "flex text-[white] gap-2 cursor-pointer items-center text-[28px] font-medium p-[20px] bg-[#281F1F] m-[16px] rounded-lg"
+                  : isActive
+                  ? "flex text-white gap-2 cursor-pointer items-center text-[22px] font-medium p-[20px] bg-secondary  m-[16px] rounded-lg"
+                  : "flex  gap-2 cursor-pointer items-center text-[22px] font-medium p-[20px]  m-[16px] rounded-lg"
+              }
+            >
+              <div className="flex justify-start items-center gap-2">
+              <HiOutlineBars4 width={25} height={25} />
+                Categories
+              </div>
+            </NavLink>
+
+            <NavLink
+              to="/withdraw-request"
               className={({ isActive, isPending }) =>
                 isPending
                   ? "flex text-[white] gap-2 cursor-pointer items-center text-[28px] font-medium p-[20px] bg-[#281F1F] m-[16px] rounded-lg"
@@ -139,10 +156,9 @@ const Sidebar = () => {
             >
               <div className="flex justify-start items-center gap-2">
               <RiExchangeDollarLine width={35} height={35} />
-                Subscription
+              Withdraw Request
               </div>
             </NavLink>
-
 
             <NavLink
               to="/settings"
@@ -155,7 +171,7 @@ const Sidebar = () => {
               }
             >
               <div className="flex justify-start items-center gap-2">
-                <CiSettings width={25} height={25} /> <span className="flex-1"> Settings</span>
+                <CiSettings width={25} height={25} /> <span className="flex-1">Settings</span>
               </div>
             </NavLink>
           </ul>

@@ -50,12 +50,12 @@ const Login = () => {
         navigate("/");
       };
     return (
-        <div className=" bg-primary px-[100px] py-[40px] rounded-xl border-2">
+        <div className=" bg-primary px-[100px] py-[40px] rounded-xl border-2 border-secondary">
         
         <div className="">
           <div className="w-[500px]">
-            <img className="" src={logo} alt="" />
-            <h1 className="text-[24px] text-center font-medium mt-[24px] mb-[32px]">
+            <img className="mx-auto w-[50%]" src={logo} alt="" />
+            <h1 className="text-[24px] text-center font-medium mt-[24px] mb-[24px]">
               Sign In
             </h1>
             <Form
@@ -68,7 +68,7 @@ const Login = () => {
                 remember: true,
               }}
               onFinish={onFinish}
-              className="space-y-1"
+              className=""
             >
               <Form.Item
                 name="email"
@@ -97,7 +97,7 @@ const Login = () => {
                     />
                   }
                   style={{
-                    border: "2px solid #0A8100",
+                    border: "2px solid #95C343",
                     height: "62px",
                     background: "#E7F2E6",
                     outline: "none",
@@ -135,7 +135,7 @@ const Login = () => {
                     />
                   }
                   style={{
-                    border: "2px solid #0A8100",
+                    border: "2px solid #95C343",
                     height: "62px",
                     background: "#E7F2E6",
                     outline: "none",
@@ -172,7 +172,7 @@ const Login = () => {
                   // type="primary"
                   style={{
                 
-                    backgroundColor: "#0A8100",
+                    backgroundColor: "#95C343",
                     color: "#fff",
                     size: "18px",
                     height: "56px",

@@ -11,6 +11,7 @@ export default {
         secondary: "#95C343",
         btn: "#95C343",
         bgColor: "#FFFFFF",
+        textColor: "#333333",
       },
     },
   },

@@ -23,7 +23,7 @@
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #0A8100;
+  background: #95C343;
 }
 
 /* Handle on hover */
@@ -42,20 +42,20 @@
 .ant-modal .ant-modal-close {
   color: white;
   font-weight: bold;
-  background-color: green;
+  background-color: #95C343;
 
 }
 
 .ant-modal .ant-modal-close:hover {
   color: white;
   font-weight: bold;
-  background-color: green;
+  background-color: #95C343;
 } 
 
 .ant-btn-default:not(:disabled):not(.ant-btn-disabled):hover{
   color: white;
-  border-color: #0A8100;
-  background: #0A8100;
+  border-color: #95C343;
+  background: #95C343;
 }
 .ant-input-outlined:hover{
   background-color: #E7F2E6;
@@ -72,7 +72,7 @@
 
 .custom-select .ant-select-selector {
   background-color: #E7F2E6 !important;
-  border: 2px solid #0A8100 !important;
+  border: 2px solid #95C343 !important;
   color: black !important;
   border-radius: 5px;
   padding: 25px !important;
@@ -81,7 +81,7 @@
 
 .chat-select .ant-select-selector {
 background-color: #E7F2E6 !important;
-border: 2px solid #0A8100 !important;
+border: 2px solid #95C343 !important;
 color: black !important;
 border-radius: 5px;
 padding: 12px !important;
@@ -131,7 +131,7 @@ background-color: #E7F2E6;
 padding: 1rem;
 color: black;
 border-radius: 5px;
-border: 2px solid #0A8100;
+border: 2px solid #95C343;
 }
 
 .PhoneInputCountry {
@@ -141,7 +141,7 @@ gap: 10px;
 background-color: #E7F2E6;
 padding: 1rem;
 border-radius: 5px;
-border: 2px solid #0A8100;
+border: 2px solid #95C343;
 }
 
 .ant-upload{
