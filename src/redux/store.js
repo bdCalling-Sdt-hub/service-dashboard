@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { baseApi } from './api/baseApi'
+import { baseApi } from './features/api/baseApi'
 // import loginSlice from './apiSlices/authentication/loginSlice'
 
 
