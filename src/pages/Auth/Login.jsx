@@ -1,66 +1,48 @@
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Form, Input } from "antd";
 
 import { HiOutlineMailOpen } from "react-icons/hi";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png";
-import baseURL from "../../config";
 import Swal from "sweetalert2";
 import { IconLock } from "@tabler/icons-react";
 import { useSignInMutation } from "../../redux/features/auth/authApi";
 import { useEffect } from "react";
 import { ImSpinner6 } from "react-icons/im";
+import { useDispatch, useSelector } from "react-redux";
+import { loggedUser } from "../../redux/features/auth/authSlice";
 
 const Login = () => {
+  const auth = useSelector(state => state.auth);
+  console.log(auth)
   const [login, { data, isLoading, isError, error }] = useSignInMutation();
+  const dispatch = useDispatch()
   const navigate = useNavigate();
   const onFinish = async ({ email, password }) => {
     login({ email, password })
-    // console.log(values);
-    // try {
-    //   const response = await baseURL.post(
-    //     `/user/sign-in`,
-    //     { email, password, loginType:3 },
-    //     {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         authentication: `Bearer ${localStorage.getItem("token")}`,
-    //       },
-    //     }
-    //   );
-    //   console.log(response);
-    //   if (response?.data?.statusCode == 200) {
-    //     localStorage.setItem("token", response?.data?.data?.token);
-    //     localStorage.setItem(
-    //       "user-update",
-    //       JSON.stringify(response?.data?.data?.attributes)
-    //     );
-    //   }
-    //   Swal.fire({
-    //     position: "top-center",
-    //     icon: "success",
-    //     title: response?.data?.message,
-    //     showConfirmButton: false,
-    //     timer: 1500,
-    //   });
-    //   navigate("/");
-    // } catch (error) {
-    //   console.log(error);
-    //   Swal.fire({
-    //     icon: "error",
-    //     title: "Try Again...",
-    //     text: error?.response?.data?.message,
-    //     footer: '<a href="#">Why do I have this issue?</a>',
-    //   });
-    // }
-    // navigate("/");
   };
   useEffect(() => {
     if (isError && error) {
-      console.log(error)
-    } else {
-      console.log(data)
+      Swal.fire({
+        icon: "error",
+        title: error?.data?.message,
+        footer: '<a href="#">Why do I have this issue?</a>',
+      });
+    } else if (data?.status === 'OK' && data?.statusCode === 200 && data?.data) {
+      dispatch(loggedUser({
+        token: data?.data?.token,
+        user: data?.data?.attributes,
+        role: data?.data?.attributes?.role
+      }))
+      Swal.fire({
+        position: "top-center",
+        icon: "success",
+        title: data?.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      navigate("/");
     }
-  }, [data, isError, error])
+  }, [data, isError, error, dispatch, navigate])
   return (
     <div className=" bg-primary px-[100px] py-[40px] rounded-xl border-2 border-secondary">
 
@@ -72,7 +54,6 @@ const Login = () => {
           </h1>
           <Form
             name="normal_login"
-            // className="login-form"
             labelCol={{ span: 22 }}
             wrapperCol={{ span: 40 }}
             layout="vertical"
@@ -116,7 +97,6 @@ const Login = () => {
                   marginBottom: "20px",
                 }}
                 required
-                bordered={false}
               />
             </Form.Item>
 
@@ -136,7 +116,6 @@ const Login = () => {
             >
               <Input.Password
                 size="large"
-                // onChange={handleChange}
                 placeholder="Enter Your Password"
                 name="current_password"
                 prefix={
@@ -153,7 +132,6 @@ const Login = () => {
                   outline: "none",
                   marginBottom: "20px",
                 }}
-                bordered={false}
               />
             </Form.Item>
 
@@ -181,7 +159,6 @@ const Login = () => {
 
             <Form.Item>
               <Button
-                // type="primary"
                 style={{
 
                   backgroundColor: "#95C343",
@@ -196,13 +173,6 @@ const Login = () => {
                   isLoading ? <h1 className="flex justify-center items-center gap-1"><ImSpinner6 className="animate-spin size-5" /> <span>Login</span></h1> : 'Login'
                 }
               </Button>
-              {/* <Link to="/dashboard"
-              // type="primary"
-              // htmlType="submit"
-              className="block text-center w-[350px] h-[56px] px-2 py-4 mt-2 hover:text-white text-white bg-[#3BA6F6] rounded-lg"
-            >
-              Log In
-            </Link> */}
             </Form.Item>
           </Form>
         </div>

@@ -1,69 +1,71 @@
 import { DatePicker } from "antd";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { useGetChartQuery } from "../redux/features/status/statusApi";
+import { useState } from "react";
 
 
 
 const BarChartIncomeRatio = () => {
-//   const [year,setYear ] = useState('2024');
-//   const {data:chart,isError,isLoading,isSuccess} = useGetChartQuery(year);
-//   if(isLoading){
-//     return <Loading/>
-//   }
-const chart = [
-    {
-        "name": "Jan",
-        "price": 500
-    },
-    {
-        "name": "Feb",
-        "price": 700
-    },
-    {
-        "name": "Mar",
-        "price": 40
-    },
-    {
-        "name": "Apr",
-        "price": 900
-    },
-    {
-        "name": "May",
-        "price": 672
-    },
-    {
-        "name": "Jun",
-        "price": 300
-    },
-    {
-        "name": "Jul",
-        "price": 800
-    },
-    {
-        "name": "Aug",
-        "price": 400
-    },
-    {
-        "name": "Sep",
-        "price": 250
-    },
-    {
-        "name": "Oct",
-        "price": 710
-    },
-    {
-        "name": "Nov",
-        "price": 310
-    },
-    {
-        "name": "Dec",
-        "price": 840
-    }
-]
+  // const [year, setYear] = useState('2024');
+  // const { data: chart, isLoading, isError, error } = useGetChartQuery(year);
+  // if (isLoading) {
+  //   return <h1>Loading....</h1>
+  // }
+  const chart = [
+      {
+          "name": "Jan",
+          "price": 500
+      },
+      {
+          "name": "Feb",
+          "price": 700
+      },
+      {
+          "name": "Mar",
+          "price": 40
+      },
+      {
+          "name": "Apr",
+          "price": 900
+      },
+      {
+          "name": "May",
+          "price": 672
+      },
+      {
+          "name": "Jun",
+          "price": 300
+      },
+      {
+          "name": "Jul",
+          "price": 800
+      },
+      {
+          "name": "Aug",
+          "price": 400
+      },
+      {
+          "name": "Sep",
+          "price": 250
+      },
+      {
+          "name": "Oct",
+          "price": 710
+      },
+      {
+          "name": "Nov",
+          "price": 310
+      },
+      {
+          "name": "Dec",
+          "price": 840
+      }
+  ]
   const onChange = (date, dateString) => {
     console.log(dateString);
     // setYear(dateString)
   };
- console.log(chart);
+  console.log(chart);
   return (
     <div className="bg-primary w-full   h-[318px] mt-5 rounded-xl border-2 shadow-xl ">
       <div className="flex justify-between p-[16px]">
@@ -93,8 +95,8 @@ const chart = [
         <BarChart
           width={1500}
           height={250}
-        //   data={chart?.data?.attributes}
-        data={chart}
+          //   data={chart?.data?.attributes}
+          data={chart}
           margin={{
             top: 5,
             right: 30,
@@ -109,7 +111,7 @@ const chart = [
             dataKey="price"
             fill="#95C343"
             barSize={36}
-            // activeBar={<Rectangle fill="pink" stroke="green" />}
+          // activeBar={<Rectangle fill="pink" stroke="green" />}
           />
           {/* <Bar
               dataKey="ThisMonth"

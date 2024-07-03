@@ -7,9 +7,38 @@ const authApi = baseApi.injectEndpoints({
                 url:'/users/signIn',
                 method:'POST',
                 body:data
-            })
+            }),
+        }),
+        forgotPassword: builder.mutation({
+            query:(data)=> ({
+                url:'/users/forgotPassword',
+                method:'POST',
+                 body:data
+             })
+            
+        }),
+        verifyOtp : builder.mutation({
+            query:(data)=> ({
+                url:'/users/verify',
+                method:'POST',
+                 body:data
+             })
+        }),
+        changePassword : builder.mutation({
+            query:(data)=> ({
+                url:'/users/cahngePassword',
+                method:'POST',
+                body:data
+             })
+        }),
+        changePasswordUseingOldPassword : builder.mutation({
+            query:(data)=> ({
+                url:'/users/changePasswordUseingOldPassword',
+                method:'POST',
+                body:data
+             })
         })
     })
 })
 
-export const {useSignInMutation} = authApi;
+export const {useSignInMutation,useForgotPasswordMutation,useVerifyOtpMutation,useChangePasswordMutation,useChangePasswordUseingOldPasswordMutation} = authApi;

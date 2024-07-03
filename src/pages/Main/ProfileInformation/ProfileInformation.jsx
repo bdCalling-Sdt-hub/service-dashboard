@@ -1,28 +1,17 @@
 import { Input } from "antd";
-import { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
-import { CiCalendarDate } from "react-icons/ci";
-// import "react-phone-number-input/style.css";
-// import PhoneInput from "react-phone-number-input";
 import { useNavigate } from "react-router-dom";
+import useUser from "../../../hooks/useUser";
 
 const ProfileInformation = () => {
-    const [currentUser,setCurrentUser] = useState()
+  const { user: currentUser } = useUser();
   const navigate = useNavigate();
-  const baseUrl = import.meta.env.VITE_API_URL;
-  useEffect(()=>{
-    const storedUser = localStorage.getItem('user-update');
-    const user = JSON.parse(storedUser);
-    console.log(user);
-    setCurrentUser(user);
-  },[])
-  console.log("uuuuuser",currentUser);
-    return (
-        <div>
+  return (
+    <div>
       <div className="flex justify-between items-center ml-[24px] mt-[40px] mb-[63px]">
         <h1 className="text-[30px] font-medium">Profile Information</h1>
         <div
-            onClick={(e) =>navigate(`/edit-profile/${currentUser?._id}`)}
+          onClick={() => navigate(`/edit-profile/${currentUser?._id}`)}
           className="flex gap-2 items-center py-[15px]
                  px-[40px]
                   bg-secondary
@@ -39,18 +28,16 @@ const ProfileInformation = () => {
         <div className="w-[33%] bg-primary rounded-xl ml-[24px] flex flex-col justify-center items-center gap-[30px] p-10">
           <img
             className="w-[242px] h-[242px] rounded-full"
-            // src={`${import.meta.env.VITE_BASE_URL}${currentUser?.image?.publicFileURL}`}
-            src="https://i.ibb.co/VBcnsLy/download.jpg"
-            alt=""
+            src={`${import.meta.env.VITE_BASE_URL}/${currentUser?.image?.publicFileURL}`}
+            alt="profileImage"
           />
           <div className="flex flex-col justify-center items-center">
             <p className="text-[20px] ">{currentUser?.role?.toUpperCase() || "Admin"}</p>
             <h1 className="text-[30px] font-medium">
-             {currentUser?.name?.toUpperCase() || "Ahad Hossain Aiman"}
+              {currentUser?.name?.toUpperCase() || "Md Rakib Islam"}
             </h1>
           </div>
         </div>
-
         <div className="flex-1 w-[66%]">
           <div className="flex flex-col gap-[24px]">
             <div className="flex gap-[25px]">
@@ -62,7 +49,7 @@ const ProfileInformation = () => {
                   Name
                 </label>
                 <Input
-              
+
                   placeholder="First name"
                   value={currentUser?.name}
                   className="p-4 bg-primary
@@ -78,7 +65,7 @@ const ProfileInformation = () => {
                   readOnly
                 />
               </div>
-              
+
             </div>
             <div className="flex-1">
               <label
@@ -88,7 +75,7 @@ const ProfileInformation = () => {
                 Email
               </label>
               <Input
-          
+
                 placeholder="Email"
                 value={currentUser?.email}
                 className="p-4 bg-primary
@@ -112,7 +99,7 @@ const ProfileInformation = () => {
                 Phone Number
               </label>
               <Input
-            
+
                 placeholder="Phone"
                 value={currentUser?.phone || "Not Provided"}
                 className="p-4 bg-primary
@@ -154,8 +141,8 @@ const ProfileInformation = () => {
           </div>
         </div>
       </div>
-        </div>
-    );
+    </div>
+  );
 }
 
 export default ProfileInformation;

@@ -1,117 +1,14 @@
-import { ConfigProvider, DatePicker, Modal, Space, Table } from "antd";
-import { Link } from "react-router-dom";
+import { ConfigProvider, Modal, Space, Table } from "antd";
 import { BsInfoCircle } from "react-icons/bs";
-import { RxCross2 } from "react-icons/rx";
 import { useState } from "react";
+import { useGetUsersQuery } from "../../../redux/features/users/usersApi";
+import moment from "moment";
 
 const AllUser = () => {
-    const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [user, setUser] = useState();
-
-  const dataSource = [
-    {
-      key: '1',
-      email: 'ahad.aiman@gmail.com',
-      name:"Ahad",
-      phoneNumber:"0123456787",
-      age: 32,
-      address: "2715 Ash Dr. San Jose, South Dakota 83475",
-      date:"2022-12-12",
-
-    },
-    {
-      key: '2',
-      email: 'ahad.aiman@gmail.com',
-      name:"Ahad",
-      phoneNumber:"0123456787",
-      age: 32,
-      address: "2715 Ash Dr. San Jose, South Dakota 83475",
-      date:"2022-12-12",
-
-    },
-    {
-      key: '3',
-      email: 'ahad.aiman@gmail.com',
-      name:"Ahad",
-      phoneNumber:"0123456787",
-      age: 32,
-      address: "2715 Ash Dr. San Jose, South Dakota 83475",
-      date:"2022-12-12",
-
-    },
-    {
-      key: '4',
-      email: 'ahad.aiman@gmail.com',
-      name:"Ahad",
-      phoneNumber:"0123456787",
-      age: 32,
-      address: "2715 Ash Dr. San Jose, South Dakota 83475",
-      date:"2022-12-12",
-
-    },
-    {
-      key: '5',
-      email: 'ahad.aiman@gmail.com',
-      name:"Ahad",
-      phoneNumber:"0123456787",
-      age: 32,
-      address: "2715 Ash Dr. San Jose, South Dakota 83475",
-      date:"2022-12-12",
-
-    },
-    {
-        key: '6',
-        email: 'ahad.aiman@gmail.com',
-      name:"Ahad",
-      phoneNumber:"0123456787",
-      age: 32,
-      address: "2715 Ash Dr. San Jose, South Dakota 83475",
-      date:"2022-12-12",
-
-      },
-      {
-        key: '7',
-        email: 'ahad.aiman@gmail.com',
-        name:"Ahad",
-        phoneNumber:"0123456787",
-        age: 32,
-        address: "2715 Ash Dr. San Jose, South Dakota 83475",
-        date:"2022-12-12",
-  
-      },
-      {
-        key: '8',
-        email: 'ahad.aiman@gmail.com',
-        name:"Ahad",
-        phoneNumber:"0123456787",
-        age: 32,
-        address: "2715 Ash Dr. San Jose, South Dakota 83475",
-        date:"2022-12-12",
-  
-      },
-      {
-        key: '9',
-        email: 'ahad.aiman@gmail.com',
-      name:"Ahad",
-      phoneNumber:"0123456787",
-      age: 32,
-      address: "2715 Ash Dr. San Jose, South Dakota 83475",
-      date:"2022-12-12",
-
-      },
-      {
-        key: '10',
-        email: 'ahad.aiman@gmail.com',
-      name:"Ahad",
-      phoneNumber:"0123456787",
-      age: 32,
-      address: "2715 Ash Dr. San Jose, South Dakota 83475",
-      date:"2022-12-12",
-
-      },
-  ];
-
+  const { data, isFetching } = useGetUsersQuery();
+  const [user, setUser] = useState(null);
   const handleView = (record) => {
     setUser(record);
     setIsModalOpen(true);
@@ -121,8 +18,8 @@ const AllUser = () => {
     {
       title: "#SI",
       dataIndex: "",
-      key: "",
-      render: (text,_,index) => (currentPage - 1) * 10 + index + 1,
+      key: "index",
+      render: (text, _, index) => (currentPage - 1) * 10 + index + 1,
     },
     {
       title: "User Name",
@@ -132,141 +29,104 @@ const AllUser = () => {
     {
       title: 'Email',
       dataIndex: 'email',
-      key: 'providerName',
+      key: 'email',
     },
     {
       title: "Phone Number",
-      dataIndex: "phoneNumber",
-      key: "phoneNumber",
+      dataIndex: "phone",
+      key: "phone",
     },
     {
       title: "Join Date",
-      dataIndex: "date",
-      key: "date",
-      
+      dataIndex: "createdAt",
+      key: "createdAt",
+      render: (text) => text ? moment(text).format('DD MMM YYYY') : "N/A",
     },
-    
     {
       title: "Action",
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-         
-            <BsInfoCircle  onClick={() => handleView(record)}  size={18} className="text-[red] cursor-pointer" />
-          
-          {/* <a><RxCross2 size={18} className='text-[red]'/></a> */}
+          <BsInfoCircle onClick={() => handleView(record)} size={18} className="text-red-600 cursor-pointer" />
         </Space>
       ),
     },
   ];
-    return (
-        <div>
-        <div className="flex justify-between items-center">
-          {/* <DatePicker
-            className="custom-date-picker"
-            onChange={onChange}
-            picker="month"
-            suffixIcon
-          /> */}
+
+  const dataSource = data?.data?.attributes || [];
+
+  return (
+    <div>
+      <div className="bg-primary border-2 rounded-t-lg mt-6">
+        <div className="flex py-6 px-5 justify-between items-center">
+          <p className="text-2xl font-bold">User List</p>
         </div>
-        <div className="bg-primary  border-2 rounded-t-lg mt-[24px]">
-          <div className="flex py-[22px] mx-[20px] justify-between items-center">
-            <p className=" test-[24px] font-bold">User List</p>
-          </div>
-          <ConfigProvider
-  theme={{
-    components: {
-      Table: {
-        headerBg: "#95C343",
-        headerColor:"white",
-        headerBorderRadius: 2,
-        colorBgContainer: "#F4F9EC",
-      },
-    },
-  }}
->
-
-
-          <Table
-          pagination={{
-            position: ["bottomCenter"],
-            current: currentPage,
-              // pageSize:10,
-              // total:usersAll?.pagination?.Users,
-              // showSizeChanger: false,
-            //   onChange: handleChangePage,
+        <ConfigProvider
+          theme={{
+            components: {
+              Table: {
+                headerBg: "#95C343",
+                headerColor: "white",
+                headerBorderRadius: 2,
+                colorBgContainer: "#F4F9EC",
+              },
+            },
           }}
-        // pagination={false}
-          columns={columns}
-          // dataSource={usersAll?.data?.attributes}
-          dataSource={dataSource}
-
-        />
+        >
+          <Table
+            loading={isFetching}
+            pagination={{
+              position: ["bottomCenter"],
+              current: currentPage,
+              onChange: setCurrentPage,
+            }}
+            columns={columns}
+            dataSource={dataSource}
+            rowKey="id"
+          />
         </ConfigProvider>
-        </div>
-        <Modal
+      </div>
+      <Modal
         open={isModalOpen}
         onOk={() => setIsModalOpen(false)}
         onCancel={() => setIsModalOpen(false)}
-        footer={[]}
-        closeIcon
+        footer={null}
       >
-      <div className="text-black bg-primary">
-        <div  className="flex justify-center items-center gap-2 flex-col border-b border-b-gray-300">
-          
-          <p className=" text-[26px] font-bold mb-[16px] my-10">User Details</p>
+        <div className="text-black bg-primary">
+          <div className="flex justify-center items-center gap-2 flex-col border-b border-gray-300">
+            <p className="text-2xl font-bold mb-4 my-10">User Details</p>
+          </div>
+          <div className="p-5">
+            <div className="flex justify-between border-b py-4">
+              <p>User Name: </p>
+              <p>{user?.name || "N/A"}</p>
+            </div>
+            <div className="flex justify-between border-b py-4">
+              <p>Email:</p>
+              <p>{user?.email || "N/A"}</p>
+            </div>
+            <div className="flex justify-between border-b py-4">
+              <p>Phone Number:</p>
+              <p>{user?.phone || "N/A"}</p>
+            </div>
+            <div className="flex justify-between border-b py-4">
+              <p>Address:</p>
+              <p>{user?.address || "N/A"}</p>
+            </div>
+            <div className="flex justify-between border-b py-4">
+              <p>Joining Date :</p>
+              <p>{user?.createdAt ? moment(user.createdAt).format('DD MMM YYYY') : "N/A"}</p>
+            </div>
+            <div className="flex justify-between border-b py-4">
+              <p>Driving license:</p>
+              <p className="text-secondary font-bold cursor-pointer">Click Here</p>
+            </div>
+          </div>
         </div>
-        <div  className="p-[20px] ">
-        <div className="flex justify-between border-b py-[16px]">
-            <p>User Name: </p>
-            <p>
-              {user?.name ? user?.name : "N/A"}
-            </p>
-          </div>
-          <div className="flex justify-between border-b py-[16px]">
-            <p>Email:</p>
-            <p>
-              {user?.email ? user?.email : "N/A"}
-            </p>
-          </div>
-          <div className="flex justify-between border-b py-[16px] ">
-            <p>Phone Number:</p>
-            <p>
-              {user?.phoneNumber ? user?.phoneNumber : "N/A"}
-            </p>
-          </div>
-          <div className="flex justify-between border-b py-[16px] ">
-            <p>Address:</p>
-            <p>
-              {user?.address ? user?.address : "N/A"}
-            </p>
-          </div>
-          <div className="flex justify-between border-b py-[16px]">
-            <p>Joining Date :</p>
-            <p>
-              {user?.date ? user?.date : "N/A"}
-            </p>
-          </div>
-          {/* <div className="flex justify-between border-b py-[16px]">
-            <p>Score:</p>
-            <p>
-              {user?.score ? user?.score : "N/A"}
-            </p>
-          </div> */}
-          <div className="flex justify-between border-b py-[16px]">
-            <p>Driving license:</p>
-            <p className="text-secondary font-bold cursor-pointer">
-             Click Here
-            </p>
-          </div>
-          
-         
-
-        </div>
-      </div>
       </Modal>
-        </div>
-    );
+    </div>
+  );
 }
 
 export default AllUser;
+
