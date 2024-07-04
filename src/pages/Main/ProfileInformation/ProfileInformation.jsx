@@ -6,6 +6,7 @@ import useUser from "../../../hooks/useUser";
 const ProfileInformation = () => {
   const { user: currentUser } = useUser();
   const navigate = useNavigate();
+  console.log()
   return (
     <div>
       <div className="flex justify-between items-center ml-[24px] mt-[40px] mb-[63px]">
@@ -28,7 +29,7 @@ const ProfileInformation = () => {
         <div className="w-[33%] bg-primary rounded-xl ml-[24px] flex flex-col justify-center items-center gap-[30px] p-10">
           <img
             className="w-[242px] h-[242px] rounded-full"
-            src={`${import.meta.env.VITE_BASE_URL}/${currentUser?.image?.publicFileURL}`}
+            src={`${import.meta.env.VITE_BASE_URL}/${currentUser?.image[0]?.publicFileUrl}`}
             alt="profileImage"
           />
           <div className="flex flex-col justify-center items-center">

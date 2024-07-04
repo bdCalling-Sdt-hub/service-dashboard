@@ -1,6 +1,6 @@
 import { Button, Form, Input, Upload } from "antd";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import PhoneInput from "react-phone-number-input";
 import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { LuImagePlus } from "react-icons/lu";
@@ -8,17 +8,19 @@ import "react-phone-number-input/style.css";
 import useUser from "../../../hooks/useUser";
 import { useUpdateProfileMutation } from "../../../redux/features/profile/profileApi";
 import Swal from "sweetalert2";
+import { useDispatch } from "react-redux";
+import { updateProfileInfo } from "../../../redux/features/auth/authSlice";
 
 const EditProfileInformation = () => {
   const { user } = useUser();
   const navigate = useNavigate();
-  const { id } = useParams();
   const baseUrl = import.meta.env.VITE_BASE_URL;
-  const [phoneNumber, setPhoneNumber] = useState(user?.phoneNumber);
+  const [phoneNumber, setPhoneNumber] = useState(user?.phoneNumber?.toString());
   const [fileList, setFileList] = useState();
-  const [imageUrl, setImageUrl] = useState(`${baseUrl}/${user?.image?.publicFileURL}`);
+  const [imageUrl, setImageUrl] = useState(`${baseUrl}/${user?.image[0]?.publicFileUrl}`);
+  const dispatch = useDispatch();
 
-  const [updateProfile, { data, isLoading, isError, error }] = useUpdateProfileMutation()
+  const [updateProfile, { data, isError, error }] = useUpdateProfileMutation()
 
   const props = {
     listType: "picture",
@@ -52,15 +54,20 @@ const EditProfileInformation = () => {
 
   const handleUpdateProfile = async (values) => {
     const { name, email } = values;
+
     const formdata = new FormData();
     if (fileList) {
       formdata.append("profile", fileList);
-    } else if (name) {
+      console.log(fileList)
+    } if (name) {
       formdata.append("name", name);
-    } else if (email) {
+      console.log(name)
+    } if (email) {
       formdata.append("email", email);
-    } else if (phoneNumber) {
+      console.log(email)
+    } if (phoneNumber) {
       formdata.append("phone", phoneNumber);
+      console.log(phoneNumber)
     }
 
     updateProfile(formdata)
@@ -68,7 +75,6 @@ const EditProfileInformation = () => {
 
   useEffect(() => {
     if (isError && error) {
-      console.log(isError)
       Swal.fire({
         icon: "error",
         title: error?.data?.message,
@@ -76,6 +82,7 @@ const EditProfileInformation = () => {
       });
     } else if (data?.statusCode === 200 && data?.data) {
       console.log(data)
+      dispatch(updateProfileInfo({ user: data?.data?.attributes }))
       Swal.fire({
         position: "top-center",
         icon: "success",
@@ -83,9 +90,10 @@ const EditProfileInformation = () => {
         showConfirmButton: false,
         timer: 1500,
       });
+      navigate("/profile-information");
     }
 
-  }, [data, isError, error])
+  }, [data, isError, error, dispatch, navigate])
   return (
     <div>
       <div
@@ -202,7 +210,7 @@ const EditProfileInformation = () => {
                       countryCallingCodeEditable={false}
                       style={{ marginTop: "12px" }}
                       defaultCountry="US"
-                      value={phoneNumber?.toString()}
+                      value={phoneNumber}
                       onChange={setPhoneNumber}
                     />
                   </Form.Item>

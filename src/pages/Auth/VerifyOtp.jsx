@@ -1,11 +1,11 @@
-import { GoArrowLeft } from "react-icons/go";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import logo from "../../assets/logo.png"
 import { useEffect, useState } from "react";
-import OTPInput from "react-otp-input";
-import Swal from "sweetalert2";
-import { useVerifyOtpMutation } from "../../redux/features/auth/authApi";
+import { GoArrowLeft } from "react-icons/go";
 import { ImSpinner6 } from "react-icons/im";
+import OTPInput from "react-otp-input";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
+import logo from "../../assets/logo.png";
+import { useVerifyOtpMutation } from "../../redux/features/auth/authApi";
 
 const VerifyOtp = () => {
   const [otp, setOtp] = useState("");
@@ -25,7 +25,7 @@ const VerifyOtp = () => {
         title: error?.data?.message,
         footer: '<a href="#">Why do I have this issue?</a>',
       });
-    } else if (data?.status === 'OK' && data?.statusCode === 200 && data?.data) {
+    } else if (data?.statusCode === 200 && data?.data) {
       Swal.fire({
         position: "top-center",
         icon: "success",

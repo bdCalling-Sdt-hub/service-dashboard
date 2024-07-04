@@ -1,10 +1,10 @@
 import { Button, Form, Input } from 'antd';
 import { useEffect, useState } from 'react';
+import { ImSpinner6 } from 'react-icons/im';
 import { MdOutlineKeyboardArrowLeft } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
-import { useAddCategoriesMutation } from '../../../redux/features/category/categoryApi';
 import Swal from 'sweetalert2';
-import { ImSpinner6 } from 'react-icons/im';
+import { useAddCategoriesMutation } from '../../../redux/features/category/categoryApi';
 const AddCategory = () => {
   const [addCategory, { data, isLoading, isError, error }] = useAddCategoriesMutation()
   const navigate = useNavigate();
@@ -27,7 +27,7 @@ const AddCategory = () => {
         title: error?.data?.message,
         footer: '<a href="#">Why do I have this issue?</a>',
       });
-    } else if (data?.status === 'OK' && data?.statusCode === 200 && data?.data) {
+    } else if (data?.statusCode === 200 && data?.data) {
       Swal.fire({
         position: "top-center",
         icon: "success",

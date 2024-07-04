@@ -11,7 +11,9 @@ const initialState = {
         loggedUser : (state,action)=>{
             state.token = action.payload.token;
             state.user = action.payload.user;
-            state.role = action.payload.role;
+        },
+        updateProfileInfo:(state,action)=>{
+            state.user = action.payload.user;
         },
         logoutUser : (state)=>{
             state.token = null;
@@ -21,5 +23,5 @@ const initialState = {
     }
 })
 
-export const {loggedUser,logoutUser} = authSlice.actions;
+export const {loggedUser,updateProfileInfo,logoutUser} = authSlice.actions;
 export default authSlice.reducer

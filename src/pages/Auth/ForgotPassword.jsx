@@ -1,12 +1,12 @@
 import { Button, Form, Input } from "antd";
-import { HiOutlineMailOpen } from "react-icons/hi";
-import { Link, useNavigate } from "react-router-dom";
-import logo from "../../assets/logo.png";
-import { GoArrowLeft } from "react-icons/go";
-import Swal from "sweetalert2";
-import { useForgotPasswordMutation } from "../../redux/features/auth/authApi";
 import { useEffect, useState } from "react";
+import { GoArrowLeft } from "react-icons/go";
+import { HiOutlineMailOpen } from "react-icons/hi";
 import { ImSpinner6 } from "react-icons/im";
+import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import logo from "../../assets/logo.png";
+import { useForgotPasswordMutation } from "../../redux/features/auth/authApi";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('')
@@ -23,7 +23,7 @@ const ForgotPassword = () => {
         title: error?.data?.message,
         footer: '<a href="#">Why do I have this issue?</a>',
       });
-    } else if (data?.status === 'OK' && data?.statusCode === 200 && data?.data) {
+    } else if (data?.statusCode === 200 && data?.data) {
       Swal.fire({
         position: "top-center",
         icon: "success",

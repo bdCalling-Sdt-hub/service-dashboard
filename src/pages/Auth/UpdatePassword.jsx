@@ -1,11 +1,11 @@
+import { IconLock } from "@tabler/icons-react";
 import { Button, Form, Input } from "antd";
+import { useEffect } from "react";
 import { GoArrowLeft } from "react-icons/go";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import logo from "../../assets/logo.png"
-import { IconLock } from "@tabler/icons-react";
 import Swal from "sweetalert2";
+import logo from "../../assets/logo.png";
 import { useChangePasswordMutation } from "../../redux/features/auth/authApi";
-import { useEffect } from "react";
 
 const UpdatePassword = () => {
   const [changePassword, { data, isError, error }] = useChangePasswordMutation()
@@ -25,7 +25,7 @@ const UpdatePassword = () => {
         title: error?.data?.message,
         footer: '<a href="#">Why do I have this issue?</a>',
       });
-    } else if (data?.status === 'OK' && data?.statusCode === 200 && data?.data) {
+    } else if (data?.statusCode === 200 && data?.data) {
       Swal.fire({
         position: "top-center",
         icon: "success",

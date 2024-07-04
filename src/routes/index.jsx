@@ -86,7 +86,7 @@ const router = createBrowserRouter([
         element: <PrivacyPolicy />,
       },
       {
-        path: "/settings/edit-privacy-policy",
+        path: "/settings/edit-privacy-policy/:id",
         element: <EditPrivacyPolicy />,
       },
       {

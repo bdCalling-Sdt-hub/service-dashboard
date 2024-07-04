@@ -1,14 +1,14 @@
 import { Button, Form, Input } from "antd";
 
-import { HiOutlineMailOpen } from "react-icons/hi";
-import { Link, useNavigate } from "react-router-dom";
-import logo from "../../assets/logo.png";
-import Swal from "sweetalert2";
 import { IconLock } from "@tabler/icons-react";
-import { useSignInMutation } from "../../redux/features/auth/authApi";
 import { useEffect } from "react";
+import { HiOutlineMailOpen } from "react-icons/hi";
 import { ImSpinner6 } from "react-icons/im";
 import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import logo from "../../assets/logo.png";
+import { useSignInMutation } from "../../redux/features/auth/authApi";
 import { loggedUser } from "../../redux/features/auth/authSlice";
 
 const Login = () => {
@@ -27,11 +27,10 @@ const Login = () => {
         title: error?.data?.message,
         footer: '<a href="#">Why do I have this issue?</a>',
       });
-    } else if (data?.status === 'OK' && data?.statusCode === 200 && data?.data) {
+    } else if (data?.statusCode === 200 && data?.data) {
       dispatch(loggedUser({
         token: data?.data?.token,
-        user: data?.data?.attributes,
-        role: data?.data?.attributes?.role
+        user: data?.data?.attributes
       }))
       Swal.fire({
         position: "top-center",

@@ -1,18 +1,18 @@
-import { Button, Form, Input, Modal, Switch } from "antd";
-import logo from "../../../assets/logo.png";
 import {
   IconLock,
 } from "@tabler/icons-react";
+import { Button, Form, Input, Modal, Switch } from "antd";
 import { useEffect, useState } from "react";
-import { MdKeyboardArrowRight } from "react-icons/md";
-import { Link, useNavigate } from "react-router-dom";
-import OTPInput from "react-otp-input";
 import { GoArrowLeft } from "react-icons/go";
 import { HiOutlineMailOpen } from "react-icons/hi";
-import Swal from "sweetalert2";
-import { useSelector } from "react-redux";
-import { useChangePasswordMutation, useChangePasswordUseingOldPasswordMutation, useForgotPasswordMutation, useVerifyOtpMutation } from "../../../redux/features/auth/authApi";
 import { ImSpinner6 } from "react-icons/im";
+import { MdKeyboardArrowRight } from "react-icons/md";
+import OTPInput from "react-otp-input";
+import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import logo from "../../../assets/logo.png";
+import { useChangePasswordMutation, useChangePasswordUseingOldPasswordMutation, useForgotPasswordMutation, useVerifyOtpMutation } from "../../../redux/features/auth/authApi";
 
 const Settings = () => {
   const { user } = useSelector(state => state?.auth)
@@ -122,7 +122,7 @@ const Settings = () => {
         title: forgotPasswordError?.data?.message,
         footer: '<a href="#">Why do I have this issue?</a>',
       });
-    } else if (forgotPasswordData?.status === 'OK' && forgotPasswordData?.statusCode === 200 && forgotPasswordData?.data) {
+    } else if (forgotPasswordData?.statusCode === 200 && forgotPasswordData?.data) {
       Swal.fire({
         position: "top-center",
         icon: "success",
@@ -142,7 +142,7 @@ const Settings = () => {
         title: verifyOtpError?.data?.message,
         footer: '<a href="#">Why do I have this issue?</a>',
       });
-    } else if (verifyOtpData?.status === 'OK' && verifyOtpData?.statusCode === 200 && verifyOtpData?.data) {
+    } else if (verifyOtpData?.statusCode === 200 && verifyOtpData?.data) {
       Swal.fire({
         position: "top-center",
         icon: "success",
