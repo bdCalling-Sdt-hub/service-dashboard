@@ -1,5 +1,4 @@
 import { createBrowserRouter } from "react-router-dom";
-import AdminRoutes from "./AdminRoute";
 import Main from "../layouts/Main/Main";
 import Auth from "../layouts/Auth/Auth";
 import Login from "../pages/Auth/Login";
@@ -25,6 +24,8 @@ import TermsAndConditions from "../pages/Main/Settings/TermsAndConditions";
 import EditTermsAndCondition from "../pages/Main/Settings/EditTermsAndCondition";
 import AboutUs from "../pages/Main/Settings/AboutUs";
 import EditAboutUs from "../pages/Main/Settings/EditAboutUs";
+import AdminRoutes from "./AdminRoutes";
+import ShowLicence from "../pages/Main/ShowLicence/ShowLicence";
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
       {
         path: "/provider",
         element: <Providers />,
+      },
+      {
+        path: "/provider/show-licence",
+        element: <ShowLicence />,
       },
       {
         path: "/categories",
@@ -94,7 +99,7 @@ const router = createBrowserRouter([
         element: <TermsAndConditions />,
       },
       {
-        path: "/settings/edit-terms-conditions",
+        path: "/settings/edit-terms-conditions/:id",
         element: <EditTermsAndCondition />,
       },
       {
@@ -102,7 +107,7 @@ const router = createBrowserRouter([
         element: <AboutUs />,
       },
       {
-        path: "/settings/edit-about-us",
+        path: "/settings/edit-about-us/:id",
         element: <EditAboutUs />,
       },
     ]

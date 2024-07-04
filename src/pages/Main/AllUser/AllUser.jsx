@@ -1,18 +1,22 @@
-import { ConfigProvider, Modal, Space, Table } from "antd";
-import { BsInfoCircle } from "react-icons/bs";
 import { useState } from "react";
+import { Button, ConfigProvider, DatePicker, Input, Modal, Space, Table, Form } from "antd";
+import { BsInfoCircle } from "react-icons/bs";
 import { useGetUsersQuery } from "../../../redux/features/users/usersApi";
 import moment from "moment";
+import { CiSearch } from "react-icons/ci";
+
+const { Item } = Form;
 
 const AllUser = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data, isFetching } = useGetUsersQuery();
   const [user, setUser] = useState(null);
+
   const handleView = (record) => {
     setUser(record);
     setIsModalOpen(true);
-  }
+  };
 
   const columns = [
     {
@@ -55,11 +59,30 @@ const AllUser = () => {
 
   const dataSource = data?.data?.attributes || [];
 
+  const onFinish = (values) => {
+    console.log('Form Values:', values);
+  };
+
   return (
     <div>
       <div className="bg-primary border-2 rounded-t-lg mt-6">
-        <div className="flex py-6 px-5 justify-between items-center">
+        <div className="w-full flex py-6 px-5 justify-between items-center">
           <p className="text-2xl font-bold">User List</p>
+          <Form
+            className="flex px-3 py-[22px] justify-between items-center"
+            layout="inline"
+            onFinish={onFinish}
+          >
+            <Item name="date">
+              <DatePicker />
+            </Item>
+            <Item name="username">
+              <Input placeholder="User name" />
+            </Item>
+            <Item>
+              <Button type="primary" className="rounded-full bg-[#95C343]" htmlType="submit"><CiSearch/></Button>
+            </Item>
+          </Form>
         </div>
         <ConfigProvider
           theme={{
@@ -129,4 +152,3 @@ const AllUser = () => {
 }
 
 export default AllUser;
-

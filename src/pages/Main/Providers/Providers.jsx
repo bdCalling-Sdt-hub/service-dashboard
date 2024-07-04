@@ -1,8 +1,12 @@
-import { ConfigProvider, Modal, Space, Table } from "antd";
+import { Button, ConfigProvider, DatePicker, Form, Input, Modal, Space, Table } from "antd";
+const { Item } = Form
 import { BsInfoCircle } from "react-icons/bs";
 import { useState } from "react";
 import moment from "moment";
 import { useGetProvidersQuery } from "../../../redux/features/provider/providerApi";
+import { CiSearch } from "react-icons/ci";
+
+// import { Link } from "react-router-dom";
 
 const Providers = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -54,12 +58,29 @@ const Providers = () => {
   ];
 
   const dataSource = data?.data?.attributes || [];
-
+  const onFinish = (values) => {
+    console.log('Form Values:', values);
+  };
   return (
     <div>
       <div className="bg-primary border-2 rounded-t-lg mt-6">
-        <div className="flex py-6 px-5 justify-between items-center">
-          <p className="text-2xl font-bold">User List</p>
+        <div className="w-full flex py-6 px-5 justify-between items-center">
+          <p className="text-2xl font-bold">Recent Transactions</p>
+          <Form
+            className="flex px-3 py-[22px] justify-between items-center"
+            layout="inline"
+            onFinish={onFinish}
+          >
+            <Item name="date">
+              <DatePicker />
+            </Item>
+            <Item name="username">
+              <Input placeholder="User name" />
+            </Item>
+            <Item>
+              <Button type='primary' className='bg-[#95C343] rounded-full' htmlType="submit"><CiSearch className='size-5 text-white' /></Button>
+            </Item>
+          </Form>
         </div>
         <ConfigProvider
           theme={{
@@ -119,6 +140,7 @@ const Providers = () => {
             </div>
             <div className="flex justify-between border-b py-4">
               <p>Driving license:</p>
+              {/* <Link to={`/provider/show-licence`}><p className="text-secondary font-bold cursor-pointer">Click Here</p></Link> */}
               <p className="text-secondary font-bold cursor-pointer">Click Here</p>
             </div>
           </div>

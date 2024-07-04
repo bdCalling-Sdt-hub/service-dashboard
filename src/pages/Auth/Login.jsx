@@ -4,7 +4,7 @@ import { IconLock } from "@tabler/icons-react";
 import { useEffect } from "react";
 import { HiOutlineMailOpen } from "react-icons/hi";
 import { ImSpinner6 } from "react-icons/im";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import logo from "../../assets/logo.png";
@@ -12,8 +12,6 @@ import { useSignInMutation } from "../../redux/features/auth/authApi";
 import { loggedUser } from "../../redux/features/auth/authSlice";
 
 const Login = () => {
-  const auth = useSelector(state => state.auth);
-  console.log(auth)
   const [login, { data, isLoading, isError, error }] = useSignInMutation();
   const dispatch = useDispatch()
   const navigate = useNavigate();
