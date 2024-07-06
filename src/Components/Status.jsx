@@ -1,5 +1,4 @@
-import { useGetAllStatusQuery } from "../redux/features/status/statusApi";
-
+import { useGetAllStatusQuery } from "../redux/features/dashboard/dashboardApi";
 
 const Status = () => {
     const { data: statusData, isLoading } = useGetAllStatusQuery();

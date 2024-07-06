@@ -2,105 +2,23 @@ import { useRef, useState } from 'react';
 import { ConfigProvider, Modal, Space, Table } from "antd";
 import { BsInfoCircle } from "react-icons/bs";
 import { useReactToPrint } from 'react-to-print';
+import { useGetRecentTransactionQuery } from '../redux/features/dashboard/dashboardApi';
+import moment from 'moment';
 
 const RecentTransaction = () => {
-  // eslint-disable-next-line no-unused-vars
-  const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [user, setUser] = useState();
+  const { data: allRecentUserTrxData, isFetching
+  } = useGetRecentTransactionQuery()
 
-  const dataSource = [
-    {
-      key: '1',
-      transactionId: '12345678',
-      name: "Ahad",
-      providerName: "Ahad Hossain",
-      age: 32,
-      amount: 3000,
-      date: "2022-12-12",
-    },
-    {
-      key: '2',
-      transactionId: '12345678',
-      name: "Ahad",
-      providerName: "Ahad Hossain",
-      age: 32,
-      amount: 3000,
-      date: "2022-12-12",
-    },
-    {
-      key: '3',
-      transactionId: '12345678',
-      name: "Ahad",
-      providerName: "Ahad Hossain",
-      age: 32,
-      amount: 3000,
-      date: "2022-12-12",
-    },
-    {
-      key: '4',
-      transactionId: '12345678',
-      name: "Ahad",
-      providerName: "Ahad Hossain",
-      age: 32,
-      amount: 3000,
-      date: "2022-12-12",
-    },
-    {
-      key: '5',
-      transactionId: '12345678',
-      name: "Ahad",
-      providerName: "Ahad Hossain",
-      age: 32,
-      amount: 3000,
-      date: "2022-12-12",
-    },
-    {
-      key: '6',
-      transactionId: '12345678',
-      name: "Ahad",
-      providerName: "Ahad Hossain",
-      age: 32,
-      amount: 3000,
-      date: "2022-12-12",
-    },
-    {
-      key: '7',
-      transactionId: '12345678',
-      name: "Ahad",
-      providerName: "Ahad Hossain",
-      age: 32,
-      amount: 3000,
-      date: "2022-12-12",
-    },
-    {
-      key: '8',
-      transactionId: '12345678',
-      name: "Ahad",
-      providerName: "Ahad Hossain",
-      age: 32,
-      amount: 3000,
-      date: "2022-12-12",
-    },
-    {
-      key: '9',
-      transactionId: '12345678',
-      name: "Ahad",
-      providerName: "Ahad Hossain",
-      age: 32,
-      amount: 3000,
-      date: "2022-12-12",
-    },
-    {
-      key: '10',
-      transactionId: '12345678',
-      name: "Ahad",
-      providerName: "Ahad Hossain",
-      age: 32,
-      amount: 3000,
-      date: "2022-12-12",
-    },
-  ];
+  const dataSource = allRecentUserTrxData?.data?.attributes?.slice(0, 10)?.map(attribute => ({
+    key: attribute?._id,
+    transactionId: attribute?.transactionId,
+    name: attribute?.user?.name,
+    providerName: attribute?.provider?.name,
+    amount: attribute?.price,
+    date: attribute?.createdAt,
+  }))
 
   const handleView = (record) => {
     setUser(record);
@@ -132,9 +50,7 @@ const RecentTransaction = () => {
       title: "Date",
       key: "date",
       dataIndex: "date",
-      render: (_, record) => (
-        <p>{record?.date ? record?.date : "N/A"}</p>
-      )
+      render: (text) => text ? moment(text).format('DD MMM YYYY') : "N/A",
     },
     {
       title: "Action",
@@ -158,7 +74,6 @@ const RecentTransaction = () => {
   return (
     <div>
       <div className="flex justify-between items-center">
-        {/* <DatePicker className="custom-date-picker" onChange={onChange} picker="month" suffixIcon /> */}
       </div>
       <div className="bg-primary border-2 rounded-t-lg mt-[24px]">
         <div className="flex py-[22px] mx-[20px] justify-between items-center">
@@ -177,17 +92,9 @@ const RecentTransaction = () => {
           }}
         >
           <Table
-            pagination={{
-              position: ["bottomCenter"],
-              current: currentPage,
-              // pageSize:10,
-              // total:usersAll?.pagination?.Users,
-              // showSizeChanger: false,
-              //   onChange: handleChangePage,
-            }}
-            // pagination={false}
+            pagination={false}
+            loading={isFetching}
             columns={columns}
-            // dataSource={usersAll?.data?.attributes}
             dataSource={dataSource}
           />
         </ConfigProvider>
@@ -212,9 +119,7 @@ const RecentTransaction = () => {
             </div>
             <div className="flex justify-between border-b py-[16px]">
               <p>Date:</p>
-              <p>
-                {user?.date ? user?.date : "N/A"}
-              </p>
+              <p>{user?.date ? moment(user?.date).format('DD MMM YYYY') : "N/A"}</p>
             </div>
             <div className="flex justify-between border-b py-[16px] ">
               <p>User Name:</p>

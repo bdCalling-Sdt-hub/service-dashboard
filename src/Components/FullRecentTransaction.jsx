@@ -4,109 +4,29 @@ const { Item } = Form;
 import { BsInfoCircle } from "react-icons/bs";
 import { useReactToPrint } from 'react-to-print';
 import { CiSearch } from 'react-icons/ci';
+import { useGetAllTransactionsQuery } from '../redux/features/dashboard/dashboardApi';
+import moment from 'moment';
 
 const FullRecentTransaction = () => {
   // eslint-disable-next-line no-unused-vars
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [user, setUser] = useState();
+  const { data: allRecentUserTrxData, isFetching
+  } = useGetAllTransactionsQuery()
+
+  const dataSource = allRecentUserTrxData?.data?.attributes?.map(attribute => ({
+    key: attribute?._id,
+    transactionId: attribute?.transactionId,
+    name: attribute?.user?.name,
+    providerName: attribute?.provider?.name,
+    amount: attribute?.price,
+    date: attribute?.createdAt,
+  }))
 
   const onFinish = (values) => {
     console.log('Form Values:', values);
   };
-
-  const dataSource = [
-    {
-      key: '1',
-      transactionId: '12345678',
-      name: "Ahad",
-      providerName: "Ahad Hossain",
-      age: 32,
-      amount: 3000,
-      date: "2022-12-12",
-    },
-    {
-      key: '2',
-      transactionId: '12345678',
-      name: "Ahad",
-      providerName: "Ahad Hossain",
-      age: 32,
-      amount: 3000,
-      date: "2022-12-12",
-    },
-    {
-      key: '3',
-      transactionId: '12345678',
-      name: "Ahad",
-      providerName: "Ahad Hossain",
-      age: 32,
-      amount: 3000,
-      date: "2022-12-12",
-    },
-    {
-      key: '4',
-      transactionId: '12345678',
-      name: "Ahad",
-      providerName: "Ahad Hossain",
-      age: 32,
-      amount: 3000,
-      date: "2022-12-12",
-    },
-    {
-      key: '5',
-      transactionId: '12345678',
-      name: "Ahad",
-      providerName: "Ahad Hossain",
-      age: 32,
-      amount: 3000,
-      date: "2022-12-12",
-    },
-    {
-      key: '6',
-      transactionId: '12345678',
-      name: "Ahad",
-      providerName: "Ahad Hossain",
-      age: 32,
-      amount: 3000,
-      date: "2022-12-12",
-    },
-    {
-      key: '7',
-      transactionId: '12345678',
-      name: "Ahad",
-      providerName: "Ahad Hossain",
-      age: 32,
-      amount: 3000,
-      date: "2022-12-12",
-    },
-    {
-      key: '8',
-      transactionId: '12345678',
-      name: "Ahad",
-      providerName: "Ahad Hossain",
-      age: 32,
-      amount: 3000,
-      date: "2022-12-12",
-    },
-    {
-      key: '9',
-      transactionId: '12345678',
-      name: "Ahad",
-      providerName: "Ahad Hossain",
-      age: 32,
-      amount: 3000,
-      date: "2022-12-12",
-    },
-    {
-      key: '10',
-      transactionId: '12345678',
-      name: "Ahad",
-      providerName: "Ahad Hossain",
-      age: 32,
-      amount: 3000,
-      date: "2022-12-12",
-    },
-  ];
 
   const handleView = (record) => {
     setUser(record);
@@ -138,9 +58,7 @@ const FullRecentTransaction = () => {
       title: "Date",
       key: "date",
       dataIndex: "date",
-      render: (_, record) => (
-        <p>{record?.date ? record?.date : "N/A"}</p>
-      )
+      render: (text) => text ? moment(text).format('DD MMM YYYY') : "N/A",
     },
     {
       title: "Action",
@@ -200,6 +118,7 @@ const FullRecentTransaction = () => {
           }}
         >
           <Table
+            loading={isFetching}
             pagination={{
               position: ["bottomCenter"],
               current: currentPage,
@@ -234,9 +153,7 @@ const FullRecentTransaction = () => {
             </div>
             <div className="flex justify-between border-b py-[16px]">
               <p>Date:</p>
-              <p>
-                {user?.date ? user?.date : "N/A"}
-              </p>
+              <p>{user?.date ? moment(user?.date).format('DD MMM YYYY') : "N/A"}</p>
             </div>
             <div className="flex justify-between border-b py-[16px] ">
               <p>User Name:</p>
