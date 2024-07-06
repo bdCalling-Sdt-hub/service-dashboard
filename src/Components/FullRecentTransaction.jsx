@@ -1,37 +1,51 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Button, ConfigProvider, DatePicker, Form, Input, Modal, Space, Table } from "antd";
 const { Item } = Form;
 import { BsInfoCircle } from "react-icons/bs";
 import { useReactToPrint } from 'react-to-print';
 import { CiSearch } from 'react-icons/ci';
-import { useGetAllTransactionsQuery } from '../redux/features/dashboard/dashboardApi';
+import { useGetRecentTransactionQuery } from '../redux/features/dashboard/dashboardApi';
 import moment from 'moment';
 
 const FullRecentTransaction = () => {
   // eslint-disable-next-line no-unused-vars
   const [currentPage, setCurrentPage] = useState(1);
+  const [params, setParams] = useState([]);
+  const [date, setDate] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [user, setUser] = useState();
-  const { data: allRecentUserTrxData, isFetching
-  } = useGetAllTransactionsQuery()
+  const [allRecentUserTrxData, setAllRecentUserTrxData] = useState([])
 
-  const dataSource = allRecentUserTrxData?.data?.attributes?.map(attribute => ({
+  const { data, isFetching, isError, error } = useGetRecentTransactionQuery(params);
+
+  const dataSource = allRecentUserTrxData?.map(attribute => ({
     key: attribute?._id,
     transactionId: attribute?.transactionId,
     name: attribute?.user?.name,
     providerName: attribute?.provider?.name,
     amount: attribute?.price,
     date: attribute?.createdAt,
-  }))
+  }));
 
   const onFinish = (values) => {
-    console.log('Form Values:', values);
+    let queryParams = [];
+    const { username, providername } = values;
+    if (date) {
+      queryParams.push({ name: 'date', value: date });
+    }
+    if (username) {
+      queryParams.push({ name: 'userName', value: username });
+    }
+    if (providername) {
+      queryParams.push({ name: 'providerName', value: providername });
+    }
+    setParams(queryParams);
   };
 
   const handleView = (record) => {
     setUser(record);
     setIsModalOpen(true);
-  }
+  };
 
   const columns = [
     {
@@ -79,10 +93,21 @@ const FullRecentTransaction = () => {
     onAfterPrint: () => setIsModalOpen(false),
   });
 
+  const handleDate = (date, dateString) => {
+    setDate(dateString)
+  }
+
+  useEffect(() => {
+    if (isError && error) {
+      setAllRecentUserTrxData([])
+    } else if (data) {
+      setAllRecentUserTrxData(data?.data?.attributes)
+    }
+  }, [data, isError, error])
+
   return (
     <div>
-      <div className="flex justify-between items-center">
-      </div>
+      <div className="flex justify-between items-center"></div>
       <div className="bg-primary border-2 rounded-t-lg mt-[24px]">
         <div className="w-full flex py-6 px-5 justify-between items-center">
           <p className="text-2xl font-bold">Recent Transactions</p>
@@ -91,8 +116,8 @@ const FullRecentTransaction = () => {
             layout="inline"
             onFinish={onFinish}
           >
-            <Item name="date">
-              <DatePicker />
+            <Item>
+              <DatePicker onChange={handleDate} />
             </Item>
             <Item name="username">
               <Input placeholder="User name" />
@@ -101,7 +126,9 @@ const FullRecentTransaction = () => {
               <Input placeholder="Provider name" />
             </Item>
             <Item>
-              <Button type='primary' className='bg-[#95C343] rounded-full' htmlType="submit"><CiSearch className='size-5 text-white' /></Button>
+              <Button type='primary' className='bg-[#95C343] rounded-full' htmlType="submit">
+                <CiSearch className='size-5 text-white' />
+              </Button>
             </Item>
           </Form>
         </div>
@@ -122,12 +149,7 @@ const FullRecentTransaction = () => {
             pagination={{
               position: ["bottomCenter"],
               current: currentPage,
-              // pageSize:10,
-              // total:usersAll?.pagination?.Users,
-              // showSizeChanger: false,
-              //   onChange: handleChangePage,
             }}
-            // pagination={false}
             columns={columns}
             dataSource={dataSource}
           />
@@ -137,7 +159,7 @@ const FullRecentTransaction = () => {
         open={isModalOpen}
         onOk={() => setIsModalOpen(false)}
         onCancel={() => setIsModalOpen(false)}
-        footer={[]}
+        footer={null}
         closeIcon
       >
         <div className="text-black bg-primary" ref={componentRef}>
@@ -147,9 +169,7 @@ const FullRecentTransaction = () => {
           <div className="p-[20px] ">
             <div className="flex justify-between border-b py-[16px]">
               <p>Transaction ID: </p>
-              <p>
-                {user?.transactionId ? user?.transactionId : "N/A"}
-              </p>
+              <p>{user?.transactionId ? user?.transactionId : "N/A"}</p>
             </div>
             <div className="flex justify-between border-b py-[16px]">
               <p>Date:</p>
@@ -157,21 +177,15 @@ const FullRecentTransaction = () => {
             </div>
             <div className="flex justify-between border-b py-[16px] ">
               <p>User Name:</p>
-              <p>
-                {user?.name ? user?.name : "N/A"}
-              </p>
+              <p>{user?.name ? user?.name : "N/A"}</p>
             </div>
             <div className="flex justify-between border-b py-[16px]">
               <p>Amount :</p>
-              <p>
-                {user?.amount ? user?.amount : "N/A"}
-              </p>
+              <p>{user?.amount ? user?.amount : "N/A"}</p>
             </div>
             <div className="flex justify-between border-b py-[16px]">
               <p>Provider Name:</p>
-              <p>
-                {user?.providerName ? user?.providerName : "N/A"}
-              </p>
+              <p>{user?.providerName ? user?.providerName : "N/A"}</p>
             </div>
             <div className="flex justify-center gap-4 items-center pt-[16px] print:hidden">
               <p
@@ -186,6 +200,6 @@ const FullRecentTransaction = () => {
       </Modal>
     </div>
   );
-}
+};
 
 export default FullRecentTransaction;

@@ -1,36 +1,39 @@
-import { ConfigProvider, Modal, Space, Table } from "antd";
+import { Button, ConfigProvider, DatePicker, Form, Input, Modal, Space, Table } from "antd";
+const { Item } = Form
 import { BsInfoCircle } from "react-icons/bs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGetWithdrawQuery } from "../../../redux/features/withdraw/withdrawApi";
+import { CiSearch } from "react-icons/ci";
 
 const Withdraw = () => {
   // eslint-disable-next-line no-unused-vars
-  const [currentPage,setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [params, setParams] = useState([]);
+  const [date, setDate] = useState('');
   const [user, setUser] = useState();
-  const { data: withdrawList, isFetching } = useGetWithdrawQuery()
-  const dataSource = withdrawList?.data?.attributes?.map(attribute => ({
-    key: attribute?._id,
-    providerName: attribute.provider?.name,
-    bankName: attribute.bankName,
-    type: attribute?.accountType,
-    accountNumber: attribute.accountNumber,
-    amount: attribute?.withdrowAmount,
-    status: attribute.status,
-    date: attribute.date,
+  const [withdrawList, setWithdrawList] = useState([])
+  const { data, isFetching, isError, error } = useGetWithdrawQuery(params)
+  const dataSource = withdrawList?.map((withdraw, index) => ({
+    key: withdraw?._id,
+    si: index + 1,
+    providerName: withdraw.provider?.name,
+    bankName: withdraw.bankName,
+    type: withdraw?.accountType,
+    accountNumber: withdraw.accountNumber,
+    amount: withdraw?.withdrowAmount,
+    status: withdraw.status,
+    date: withdraw.date,
   }))
-
   const handleView = (record) => {
     setUser(record);
     setIsModalOpen(true);
   }
-
   const columns = [
     {
       title: "#SI",
-      dataIndex: "",
-      key: "",
-      render: (text, _, index) => (currentPage - 1) * 10 + index + 1,
+      dataIndex: "si",
+      key: "si",
     },
     {
       title: "Provider Name",
@@ -76,13 +79,55 @@ const Withdraw = () => {
       ),
     },
   ];
+  const onFinish = (values) => {
+    let queryParams = [];
+    const { username, providername } = values;
+    if (date) {
+      queryParams.push({ name: 'date', value: date });
+    }
+    if (username) {
+      queryParams.push({ name: 'userName', value: username });
+    }
+    if (providername) {
+      queryParams.push({ name: 'providerName', value: providername });
+    }
+    setParams(queryParams);
+  };
+
+  const handleDate = (date, dateString) => {
+    setDate(dateString)
+  }
+  useEffect(() => {
+    if (isError && error) {
+      setWithdrawList([])
+    } else if (data) {
+      setWithdrawList(data?.data?.attributes)
+    }
+  }, [data, isError, error])
   return (
     <div>
       <div className="flex justify-between items-center">
       </div>
       <div className="bg-primary  border-2 rounded-t-lg mt-[24px]">
-        <div className="flex py-[22px] mx-[20px] justify-between items-center">
-          <p className=" test-[24px] font-bold">Withdraw Request List</p>
+        <div className="w-full flex py-6 px-5 justify-between items-center">
+          <p className="text-2xl font-bold">Withdraw Request Details</p>
+          <Form
+            className="flex px-3 py-[22px] justify-between items-center"
+            layout="inline"
+            onFinish={onFinish}
+          >
+            <Item>
+              <DatePicker onChange={handleDate} />
+            </Item>
+            <Item name="providername">
+              <Input placeholder="Provider name" />
+            </Item>
+            <Item>
+              <Button type='primary' className='bg-[#95C343] rounded-full' htmlType="submit">
+                <CiSearch className='size-5 text-white' />
+              </Button>
+            </Item>
+          </Form>
         </div>
         <ConfigProvider
           theme={{
@@ -121,8 +166,25 @@ const Withdraw = () => {
         closeIcon
       >
         <div className="text-black bg-primary">
-          <div className="flex justify-center items-center gap-2 flex-col border-b border-b-gray-300">
-            <p className=" text-[26px] font-bold mb-[16px] my-10">Withdraw Request Details</p>
+          <div className="w-full flex py-6 px-5 justify-between items-center">
+            <p className="text-2xl font-bold">Withdraw Request Details</p>
+            {/* <Form
+            className="flex px-3 py-[22px] justify-between items-center"
+            layout="inline"
+            onFinish={onFinish}
+          >
+            <Item>
+              <DatePicker onChange={handleDate} />
+            </Item>
+            <Item name="providername">
+              <Input placeholder="Provider name" />
+            </Item>
+            <Item>
+              <Button type='primary' className='bg-[#95C343] rounded-full' htmlType="submit">
+                <CiSearch className='size-5 text-white' />
+              </Button>
+            </Item>
+          </Form> */}
           </div>
           <div className="p-[20px] ">
             <div className="flex justify-between border-b py-[16px]">

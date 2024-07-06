@@ -1,29 +1,36 @@
 import { Button, ConfigProvider, DatePicker, Form, Input, Modal, Space, Table } from "antd";
 const { Item } = Form
 import { BsInfoCircle } from "react-icons/bs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import moment from "moment";
 import { useGetProvidersQuery } from "../../../redux/features/provider/providerApi";
 import { CiSearch } from "react-icons/ci";
-
-// import { Link } from "react-router-dom";
-
 const Providers = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { data, isFetching } = useGetProvidersQuery();
+  const [params, setParams] = useState([]);
+  const [date, setDate] = useState('');
+  const [allProvider, setAllProvider] = useState([]);
   const [user, setUser] = useState(null);
+  const { data, isError, error, isFetching } = useGetProvidersQuery(params);
   const handleView = (record) => {
     setUser(record);
     setIsModalOpen(true);
   }
 
+  const dataSource = allProvider?.map((provider, index) => ({
+    key: provider?._id,
+    si: index + 1,
+    name: provider?.name,
+    email: provider?.email,
+    phone: provider?.phone,
+    createdAt: provider?.createdAt,
+  }));
   const columns = [
     {
       title: "#SI",
-      dataIndex: "",
+      dataIndex: "si",
       key: "index",
-      render: (text, _, index) => (currentPage - 1) * 10 + index + 1,
     },
     {
       title: "User Name",
@@ -56,11 +63,31 @@ const Providers = () => {
       ),
     },
   ];
-
-  const dataSource = data?.data?.attributes || [];
   const onFinish = (values) => {
-    console.log('Form Values:', values);
+    let queryParams = [];
+    const { username, providername } = values;
+    if (date) {
+      queryParams.push({ name: 'date', value: date });
+    }
+    if (username) {
+      queryParams.push({ name: 'userName', value: username });
+    }
+    if (providername) {
+      queryParams.push({ name: 'providerName', value: providername });
+    }
+    setParams(queryParams);
   };
+
+  const handleDate = (date, dateString) => {
+    setDate(dateString)
+  }
+  useEffect(() => {
+    if (isError && error) {
+      setAllProvider([])
+    } else if (data) {
+      setAllProvider(data?.data?.attributes)
+    }
+  }, [data, isError, error])
   return (
     <div>
       <div className="bg-primary border-2 rounded-t-lg mt-6">
@@ -71,14 +98,16 @@ const Providers = () => {
             layout="inline"
             onFinish={onFinish}
           >
-            <Item name="date">
-              <DatePicker />
+            <Item>
+              <DatePicker onChange={handleDate} />
             </Item>
-            <Item name="username">
-              <Input placeholder="User name" />
+            <Item name="providername">
+              <Input placeholder="Provider name" />
             </Item>
             <Item>
-              <Button type='primary' className='bg-[#95C343] rounded-full' htmlType="submit"><CiSearch className='size-5 text-white' /></Button>
+              <Button type='primary' className='bg-[#95C343] rounded-full' htmlType="submit">
+                <CiSearch className='size-5 text-white' />
+              </Button>
             </Item>
           </Form>
         </div>

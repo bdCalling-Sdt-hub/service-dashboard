@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, ConfigProvider, DatePicker, Input, Modal, Space, Table, Form } from "antd";
 import { BsInfoCircle } from "react-icons/bs";
 import { useGetUsersQuery } from "../../../redux/features/users/usersApi";
@@ -10,20 +10,30 @@ const { Item } = Form;
 const AllUser = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { data, isFetching } = useGetUsersQuery();
+  const [params, setParams] = useState([]);
+  const [date, setDate] = useState('');
+  const [allUser, setAllUser] = useState([]);
   const [user, setUser] = useState(null);
+  const { data, isFetching, isError, error } = useGetUsersQuery(params);
 
   const handleView = (record) => {
     setUser(record);
     setIsModalOpen(true);
   };
 
+  const dataSource = allUser?.map((user, index) => ({
+    key: user._id,
+    si: index + 1,
+    name: user?.name,
+    email: user?.email,
+    phone: user?.phone,
+    createdAt: user?.createdAt,
+  }))
   const columns = [
     {
       title: "#SI",
-      dataIndex: "",
+      dataIndex: "si",
       key: "index",
-      render: (text, _, index) => (currentPage - 1) * 10 + index + 1,
     },
     {
       title: "User Name",
@@ -57,12 +67,31 @@ const AllUser = () => {
     },
   ];
 
-  const dataSource = data?.data?.attributes || [];
-
   const onFinish = (values) => {
-    console.log('Form Values:', values);
+    let queryParams = [];
+    const { username, providername } = values;
+    if (date) {
+      queryParams.push({ name: 'date', value: date });
+    }
+    if (username) {
+      queryParams.push({ name: 'userName', value: username });
+    }
+    if (providername) {
+      queryParams.push({ name: 'providerName', value: providername });
+    }
+    setParams(queryParams);
   };
 
+  const handleDate = (date, dateString) => {
+    setDate(dateString)
+  }
+  useEffect(() => {
+    if (isError && error) {
+      setAllUser([])
+    } else if (data) {
+      setAllUser(data?.data?.attributes)
+    }
+  }, [data, isError, error])
   return (
     <div>
       <div className="bg-primary border-2 rounded-t-lg mt-6">
@@ -73,14 +102,16 @@ const AllUser = () => {
             layout="inline"
             onFinish={onFinish}
           >
-            <Item name="date">
-              <DatePicker />
+            <Item>
+              <DatePicker onChange={handleDate} />
             </Item>
             <Item name="username">
               <Input placeholder="User name" />
             </Item>
             <Item>
-              <Button type="primary" className="rounded-full bg-[#95C343]" htmlType="submit"><CiSearch/></Button>
+              <Button type='primary' className='bg-[#95C343] rounded-full' htmlType="submit">
+                <CiSearch className='size-5 text-white' />
+              </Button>
             </Item>
           </Form>
         </div>

@@ -14,19 +14,21 @@ const dashboardApi = baseApi.injectEndpoints({
                 method:'GET'
             })
         }),
-        getRecentTransaction:builder.query({
-            query:()=>({
+        getRecentTransaction:builder.query({      
+            query:(args)=>{
+                const params = new URLSearchParams();
+                if (args) {
+                  args.forEach((item) => {
+                    params.append(item.name, item.value);
+                  });
+                }
+                return{
                 url:'/adminall/recentTransactionFilter',
-                method:'GET'
-            })
-        }),
-        getAllTransactions:builder.query({
-            query:()=>({
-                url:'/adminall/recentTransaction',
-                method:'GET'
-            })
+                method:'GET',
+                params:params,
+            }}
         })
     })
 })
 
-export const {useGetAllStatusQuery,useGetChartQuery,useGetRecentTransactionQuery,useGetAllTransactionsQuery} = dashboardApi;
+export const {useGetAllStatusQuery,useGetChartQuery,useGetRecentTransactionQuery} = dashboardApi;

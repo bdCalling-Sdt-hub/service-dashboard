@@ -13,6 +13,7 @@ const BarChartIncomeRatio = () => {
   }
 
   const onChange = (date, dateString) => {
+    console.log(date,dateString)
     setYear(dateString);
   };
 
