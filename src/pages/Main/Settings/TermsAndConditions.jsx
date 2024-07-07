@@ -1,22 +1,21 @@
 import { MdOutlineKeyboardArrowLeft } from 'react-icons/md';
 import { Link, useNavigate } from 'react-router-dom';
 import { useGetTermsAndConditionQuery } from '../../../redux/features/settings/settingsApi';
-import { ImSpinner6 } from 'react-icons/im';
 import { useEffect } from 'react';
+import { Empty, Spin } from 'antd';
 
 const TermsAndConditions = () => {
   const navigate = useNavigate();
   const { data, isFetching, isError, error, refetch } = useGetTermsAndConditionQuery();
-
 
   useEffect(() => {
     refetch();
   }, [refetch]);
   let content = null;
   if (isFetching && !isError) {
-    content = <div className="flex justify-center items-center"><ImSpinner6 className="animate-spin text-primary" size={100} /></div>
+    return <div className='w-full h-screen flex justify-center items-center'><Spin size='large' /></div>
   } else if (!isFetching && isError && error) {
-    return <div className='w-full p-5 text-center text-xl text-rose-500'>Something went wrong</div>
+    return <Empty description='No Data Available' />
   } else if (!isFetching && !isError && data?.data?.attributes) {
     content = data?.data?.attributes?.text;
   }

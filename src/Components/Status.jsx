@@ -1,9 +1,12 @@
+import { Empty, Spin } from "antd";
 import { useGetAllStatusQuery } from "../redux/features/dashboard/dashboardApi";
 
 const Status = () => {
-    const { data: statusData, isLoading } = useGetAllStatusQuery();
-    if (isLoading) {
-        return <h1>Loading....</h1>
+    const { data: statusData, isFetching, isError, error } = useGetAllStatusQuery();
+    if (isFetching) {
+        return <div className="w-full h-screen flex justify-center items-center"><Spin size="large" /></div>
+    } else if (isError && error) {
+        return <Empty description='No Data Available' />
     }
     return (
         <div className="grid grid-cols-3 gap-[24px] mt-[24px]">

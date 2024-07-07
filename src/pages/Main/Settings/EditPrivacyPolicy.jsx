@@ -5,20 +5,20 @@ import JoditEditor from "jodit-react";
 import { useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
 import { useGetPrivacyQuery, useUpdatePrivacyMutation } from "../../../redux/features/settings/settingsApi";
+import { ImSpinner6 } from "react-icons/im";
 
 const EditPrivacyPolicy = () => {
   const { id } = useParams()
   const navigate = useNavigate();
   const editor = useRef(null);
   const { data } = useGetPrivacyQuery();
-  const [updatePrivacy, { data: updatePrivacyData, isError, error }] = useUpdatePrivacyMutation()
+  const [updatePrivacy, { data: updatePrivacyData, isLoading, isError, error }] = useUpdatePrivacyMutation()
   const [content, setContent] = useState("");
 
 
   const handleUpdate = async () => {
     updatePrivacy({ data: { text: content }, id })
   }
-
   useEffect(() => {
     setContent(data?.data?.attributes?.text);
   }, [data])
@@ -78,7 +78,10 @@ const EditPrivacyPolicy = () => {
           className="mt-[30px] h-[60px] hover:text-white bg-secondary hover:bg-gradient-to-r from-red-500 via-red-600 to-red-800
         text-white py-3 rounded-lg w-full text-[18px] font-medium  duration-200"
         >
-          Update
+          {
+            isLoading ? <h1 className="flex justify-center items-center gap-1"><ImSpinner6 className="animate-spin size-5" /> <span>Update</span></h1> : 'Update'
+          }
+
         </Button>
       </div>
     </div>

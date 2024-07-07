@@ -4,6 +4,7 @@ import { BsInfoCircle } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import { useGetWithdrawQuery } from "../../../redux/features/withdraw/withdrawApi";
 import { CiSearch } from "react-icons/ci";
+import moment from "moment";
 
 const Withdraw = () => {
   // eslint-disable-next-line no-unused-vars
@@ -22,8 +23,8 @@ const Withdraw = () => {
     type: withdraw?.accountType,
     accountNumber: withdraw.accountNumber,
     amount: withdraw?.withdrowAmount,
+    date:withdraw?.createdAt,
     status: withdraw.status,
-    date: withdraw.date,
   }))
   const handleView = (record) => {
     setUser(record);
@@ -53,19 +54,25 @@ const Withdraw = () => {
     {
       title: "A/C Number",
       dataIndex: "accountNumber",
-      key: "date",
+      key: "a/cNumber",
 
     },
     {
       title: "Withdraw Amount",
       dataIndex: "amount",
-      key: "date",
+      key: "amount",
 
+    },
+    {
+      title: "Date",
+      dataIndex: "date",
+      key: "date",
+      render: (text) => text ? moment(text).format('DD MMM YYYY') : "N/A",
     },
     {
       title: "Status",
       dataIndex: "status",
-      key: "date",
+      key: "status",
 
     },
     {
@@ -168,23 +175,6 @@ const Withdraw = () => {
         <div className="text-black bg-primary">
           <div className="w-full flex py-6 px-5 justify-between items-center">
             <p className="text-2xl font-bold">Withdraw Request Details</p>
-            {/* <Form
-            className="flex px-3 py-[22px] justify-between items-center"
-            layout="inline"
-            onFinish={onFinish}
-          >
-            <Item>
-              <DatePicker onChange={handleDate} />
-            </Item>
-            <Item name="providername">
-              <Input placeholder="Provider name" />
-            </Item>
-            <Item>
-              <Button type='primary' className='bg-[#95C343] rounded-full' htmlType="submit">
-                <CiSearch className='size-5 text-white' />
-              </Button>
-            </Item>
-          </Form> */}
           </div>
           <div className="p-[20px] ">
             <div className="flex justify-between border-b py-[16px]">

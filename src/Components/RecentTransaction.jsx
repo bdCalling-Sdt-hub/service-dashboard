@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ConfigProvider, Modal, Space, Table } from "antd";
 import { BsInfoCircle } from "react-icons/bs";
 import { useReactToPrint } from 'react-to-print';
@@ -8,10 +8,11 @@ import moment from 'moment';
 const RecentTransaction = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [user, setUser] = useState();
-  const { data: allRecentUserTrxData, isFetching
+  const [allRecentUserTrxData, setAllRecentUserTrxData] = useState([])
+  const { data, isFetching, isError, error
   } = useGetRecentTransactionQuery()
 
-  const dataSource = allRecentUserTrxData?.data?.attributes?.slice(0, 10)?.map(attribute => ({
+  const dataSource = allRecentUserTrxData?.slice(0, 10)?.map(attribute => ({
     key: attribute?._id,
     transactionId: attribute?.transactionId,
     name: attribute?.user?.name,
@@ -71,6 +72,13 @@ const RecentTransaction = () => {
     onAfterPrint: () => setIsModalOpen(false),
   });
 
+  useEffect(() => {
+    if (isError && error) {
+      setAllRecentUserTrxData([])
+    } else if (data) {
+      setAllRecentUserTrxData(data?.data?.attributes)
+    }
+  }, [data, isError, error])
   return (
     <div>
       <div className="flex justify-between items-center">

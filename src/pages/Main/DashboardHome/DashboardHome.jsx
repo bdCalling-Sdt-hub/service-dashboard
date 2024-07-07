@@ -8,8 +8,6 @@ const DashboardHome = () => {
             <Status/>
             <BarChartIncomeRatio/>
             <RecentTransaction/>
-            {/* <DashboardEventsList/> */}
-            {/* <DashboardMatchesList/> */}
         </div>
     );
 }

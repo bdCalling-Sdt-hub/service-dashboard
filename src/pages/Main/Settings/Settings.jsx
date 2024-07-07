@@ -112,7 +112,6 @@ const Settings = () => {
       setIsModalOpen(false);
 
     }
-
   }, [data, isError, error])
 
   useEffect(() => {
@@ -133,7 +132,6 @@ const Settings = () => {
       setModelTitle("Verify OTP")
 
     }
-
   }, [forgotPasswordData, forgotPasswordIsError, forgotPasswordError])
   useEffect(() => {
     if (verifyOtpIsError && verifyOtpError) {
