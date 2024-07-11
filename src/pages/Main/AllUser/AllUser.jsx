@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, ConfigProvider, DatePicker, Input, Modal, Space, Table, Form } from "antd";
+import { Button, ConfigProvider, DatePicker, Input, Modal, Space, Table, Form, Image } from "antd";
 import { BsInfoCircle } from "react-icons/bs";
 import { useGetUsersQuery } from "../../../redux/features/users/usersApi";
 import moment from "moment";
@@ -28,6 +28,8 @@ const AllUser = () => {
     email: user?.email,
     phone: user?.phone,
     createdAt: user?.createdAt,
+    driverLicenceFront: user?.driverLicenceFront,
+    driverLicenceback: user?.driverLicenceback
   }))
   const columns = [
     {
@@ -171,9 +173,19 @@ const AllUser = () => {
               <p>Joining Date :</p>
               <p>{user?.createdAt ? moment(user.createdAt).format('DD MMM YYYY') : "N/A"}</p>
             </div>
-            <div className="flex justify-between border-b py-4">
-              <p>Driving license:</p>
-              <p className="text-secondary font-bold cursor-pointer">Click Here</p>
+            <div>
+              <p>Driving license</p>
+              <div className="flex gap-5 mt-5">
+                <Image
+                  width={60}
+                  src={`${import.meta.env.VITE_BASE_URL}/${user?.driverLicenceFront[0]?.publicFileUrl}`}
+                />
+                <Image
+                  width={60}
+                  src={`${import.meta.env.VITE_BASE_URL}/${user?.driverLicenceback[0]?.publicFileUrl}`}
+                />
+
+              </div>
             </div>
           </div>
         </div>

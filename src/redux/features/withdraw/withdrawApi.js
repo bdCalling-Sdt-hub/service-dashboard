@@ -14,8 +14,23 @@ const withdrawApi = baseApi.injectEndpoints({
                 url:'/withdrow/admin/getWithdrowList',
                 method:'GET',
                 params:params,
-            }}
+            }},
+            providesTags:["Withdraw"]
+        }),
+        approvedWithdraw: builder.mutation({
+          query:(id)=>({
+            url:`/withdrow/approvedWithdrow?id=${id}`,
+            method:'PATCH',
+          }),
+          invalidatesTags:["Withdraw"]
+        }),
+        cancelWithdraw: builder.mutation({
+          query:(id)=>({
+            url:`/withdrow/canceledWithdrow?id=${id}`,
+            method:'PATCH',
+          }),
+          invalidatesTags:["Withdraw"]
         })
     })
 })
-export const {useGetWithdrawQuery} = withdrawApi
+export const {useGetWithdrawQuery,useApprovedWithdrawMutation,useCancelWithdrawMutation} = withdrawApi

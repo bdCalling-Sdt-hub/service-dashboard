@@ -27,7 +27,7 @@ const dashboardApi = baseApi.injectEndpoints({
                 method:'GET',
                 params:params,
             }}
-        })
+        }),
     })
 })
 

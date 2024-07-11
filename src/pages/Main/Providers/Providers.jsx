@@ -1,4 +1,4 @@
-import { Button, ConfigProvider, DatePicker, Form, Input, Modal, Space, Table } from "antd";
+import { Button, ConfigProvider, DatePicker, Form, Image, Input, Modal, Space, Table } from "antd";
 const { Item } = Form
 import { BsInfoCircle } from "react-icons/bs";
 import { useEffect, useState } from "react";
@@ -25,6 +25,8 @@ const Providers = () => {
     email: provider?.email,
     phone: provider?.phone,
     createdAt: provider?.createdAt,
+    driverLicenceFront: provider?.driverLicenceFront,
+    driverLicenceback: provider?.driverLicenceback
   }));
   const columns = [
     {
@@ -167,10 +169,19 @@ const Providers = () => {
               <p>Joining Date :</p>
               <p>{user?.createdAt ? moment(user.createdAt).format('DD MMM YYYY') : "N/A"}</p>
             </div>
-            <div className="flex justify-between border-b py-4">
-              <p>Driving license:</p>
-              {/* <Link to={`/provider/show-licence`}><p className="text-secondary font-bold cursor-pointer">Click Here</p></Link> */}
-              <p className="text-secondary font-bold cursor-pointer">Click Here</p>
+            <div>
+              <p>Driving license</p>
+              <div className="flex gap-5 mt-5">
+                <Image
+                  width={60}
+                  src={`${import.meta.env.VITE_BASE_URL}/${user?.driverLicenceFront[0]?.publicFileUrl}`}
+                />
+                <Image
+                  width={60}
+                  src={`${import.meta.env.VITE_BASE_URL}/${user?.driverLicenceback[0]?.publicFileUrl}`}
+                />
+
+              </div>
             </div>
           </div>
         </div>

@@ -11,6 +11,7 @@ export const baseApi = createApi({
             return headers
           },
     }),
+    tagTypes: ['Withdraw'],
     endpoints:()=>({
     })
 })

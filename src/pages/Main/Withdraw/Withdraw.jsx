@@ -2,9 +2,10 @@ import { Button, ConfigProvider, DatePicker, Form, Input, Modal, Space, Table } 
 const { Item } = Form
 import { BsInfoCircle } from "react-icons/bs";
 import { useEffect, useState } from "react";
-import { useGetWithdrawQuery } from "../../../redux/features/withdraw/withdrawApi";
+import { useApprovedWithdrawMutation, useCancelWithdrawMutation, useGetWithdrawQuery } from "../../../redux/features/withdraw/withdrawApi";
 import { CiSearch } from "react-icons/ci";
 import moment from "moment";
+import Swal from "sweetalert2";
 
 const Withdraw = () => {
   // eslint-disable-next-line no-unused-vars
@@ -14,7 +15,9 @@ const Withdraw = () => {
   const [date, setDate] = useState('');
   const [user, setUser] = useState();
   const [withdrawList, setWithdrawList] = useState([])
-  const { data, isFetching, isError, error } = useGetWithdrawQuery(params)
+  const { data, isFetching, isError, error } = useGetWithdrawQuery(params);
+  const [approvedWithdraw, { data: approvedData, isError: approvedIsError, error: approvedError }] = useApprovedWithdrawMutation();
+  const [cancelWithdraw, { data: cancelData, isError: cancelIsError, error: cancelError }] = useCancelWithdrawMutation();
   const dataSource = withdrawList?.map((withdraw, index) => ({
     key: withdraw?._id,
     si: index + 1,
@@ -23,7 +26,7 @@ const Withdraw = () => {
     type: withdraw?.accountType,
     accountNumber: withdraw.accountNumber,
     amount: withdraw?.withdrowAmount,
-    date:withdraw?.createdAt,
+    date: withdraw?.createdAt,
     status: withdraw.status,
   }))
   const handleView = (record) => {
@@ -104,6 +107,13 @@ const Withdraw = () => {
   const handleDate = (date, dateString) => {
     setDate(dateString)
   }
+  const handleApprovedStatus = (id) => {
+    approvedWithdraw(id)
+  }
+
+  const handleCancelStatus = (id) => {
+    cancelWithdraw(id)
+  }
   useEffect(() => {
     if (isError && error) {
       setWithdrawList([])
@@ -111,6 +121,44 @@ const Withdraw = () => {
       setWithdrawList(data?.data?.attributes)
     }
   }, [data, isError, error])
+
+  useEffect(() => {
+    if (approvedIsError && approvedError) {
+      Swal.fire({
+        icon: "error",
+        title: approvedError?.data?.message,
+        footer: '<a href="#">Why do I have this issue?</a>',
+      });
+    } else if (approvedData) {
+      Swal.fire({
+        position: "top-center",
+        icon: "success",
+        title: approvedData?.message,
+        showConfirmButton: false,
+      });
+      setIsModalOpen(false);
+    }
+
+  }, [approvedData, approvedIsError, approvedError])
+  useEffect(() => {
+    if (cancelError && cancelIsError) {
+      Swal.fire({
+        icon: "error",
+        title: cancelError?.data?.message,
+        footer: '<a href="#">Why do I have this issue?</a>',
+      });
+    } else if (cancelData) {
+      Swal.fire({
+        position: "top-center",
+        icon: "success",
+        title: cancelData?.message,
+        showConfirmButton: false,
+      });
+      setIsModalOpen(false);
+    }
+
+  }, [cancelData, cancelError, cancelIsError])
+
   return (
     <div>
       <div className="flex justify-between items-center">
@@ -208,8 +256,8 @@ const Withdraw = () => {
               </p>
             </div>
             <div className="flex justify-center gap-4 items-center pt-[16px]">
-              <p className="px-[35px] cursor-pointer py-[10px] bg-white border-2 border-secondary text-secondary rounded-lg">Cancel</p>
-              <p className="px-[55px] cursor-pointer py-[10px] bg-secondary text-white rounded-lg">
+              <p onClick={() => handleCancelStatus(user?.key)} className="px-[35px] cursor-pointer py-[10px] bg-white border-2 border-secondary text-secondary rounded-lg">Cancel</p>
+              <p onClick={() => handleApprovedStatus(user?.key)} className="px-[55px] cursor-pointer py-[10px] bg-secondary text-white rounded-lg">
                 {/* Regular P550 */}
                 Approve
               </p>
