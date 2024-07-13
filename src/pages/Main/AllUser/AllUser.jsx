@@ -71,15 +71,12 @@ const AllUser = () => {
 
   const onFinish = (values) => {
     let queryParams = [];
-    const { username, providername } = values;
+    const { username } = values;
     if (date) {
       queryParams.push({ name: 'date', value: date });
     }
     if (username) {
       queryParams.push({ name: 'userName', value: username });
-    }
-    if (providername) {
-      queryParams.push({ name: 'providerName', value: providername });
     }
     setParams(queryParams);
   };

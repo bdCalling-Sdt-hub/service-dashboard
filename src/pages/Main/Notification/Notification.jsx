@@ -17,6 +17,7 @@ const Notification = () => {
     console.log(values);
     // setCurrentPage(values);
   };
+  console.log(data)
   return (
     <div>
       <div className="pl-[24px] ">
