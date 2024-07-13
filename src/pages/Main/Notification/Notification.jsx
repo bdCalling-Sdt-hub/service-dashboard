@@ -9,15 +9,12 @@ const Notification = () => {
     return <div className="w-full h-screen flex justify-center items-center"><Spin size="large" /></div>
   } else if (error) {
     return <div className=" mt-10"><Empty /></div>
-  } else if (data) {
-    console.log(data)
   }
 
   const onChange = (values) => {
     console.log(values);
     // setCurrentPage(values);
   };
-  console.log(data)
   return (
     <div>
       <div className="pl-[24px] ">
@@ -28,16 +25,11 @@ const Notification = () => {
             </h1>
           </div>
           <div className="flex flex-col">
-            {/* {
-                data?.data?.attributes?.map((item,index)=>(
-                  <NotificationCart key={item?._id} item={item}/>
-                ))
-              } */}
-            <NotificationCart />
-            <NotificationCart />
-            <NotificationCart />
-            <NotificationCart />
-
+            {
+              data?.data?.attributes?.map((item) => (
+                <NotificationCart key={item?._id} item={item} />
+              ))
+            }
           </div>
           <div className="flex justify-center my-10">
             <Pagination
