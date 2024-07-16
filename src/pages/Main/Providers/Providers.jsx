@@ -91,7 +91,7 @@ const Providers = () => {
     <div>
       <div className="bg-primary border-2 rounded-t-lg mt-6">
         <div className="w-full flex py-6 px-5 justify-between items-center">
-          <p className="text-2xl font-bold">Recent Transactions</p>
+          <p className="text-2xl font-bold">All Provider</p>
           <Form
             className="flex px-3 py-[22px] justify-between items-center"
             layout="inline"
