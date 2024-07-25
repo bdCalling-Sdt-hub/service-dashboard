@@ -1,24 +1,39 @@
-import { FaPlus } from 'react-icons/fa6';
-import { useNavigate } from 'react-router-dom';
-import CategoriesCart from '../../../Components/CategoriesCart';
-import { useGetCategoriesQuery } from '../../../redux/features/category/categoryApi';
-import { useEffect } from 'react';
-import { Empty, Spin } from 'antd';
+import { FaPlus } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
+import CategoriesCart from "../../../Components/CategoriesCart";
+import { useGetCategoriesQuery } from "../../../redux/features/category/categoryApi";
+import { useEffect } from "react";
+import { Empty, Spin } from "antd";
 
 const Categories = () => {
-    const { data: categoriesData, isFetching, isError, error, refetch } = useGetCategoriesQuery();
+    const {
+        data: categoriesData,
+        isFetching,
+        isError,
+        error,
+        refetch,
+    } = useGetCategoriesQuery();
     const navigate = useNavigate();
     useEffect(() => {
-        refetch()
-    }, [refetch])
+        refetch();
+    }, [refetch]);
+    let content = null;
     if (isFetching) {
-        return (
+        content = (
             <div className="w-full h-screen flex justify-center items-center">
-                <Spin size='large' />
+                <Spin size="large" />
             </div>
-        )
+        );
     } else if (isError && error) {
-        return <Empty description='No Data Available' />
+        content = <Empty description="No Data Available" />;
+    } else if (categoriesData?.data?.attributes) {
+        content = (
+            <div className="grid grid-cols-6 gap-4 my-4">
+                {categoriesData?.data?.attributes?.map((category) => (
+                    <CategoriesCart key={category?._id} category={category} />
+                ))}
+            </div>
+        );
     }
     return (
         <div>
@@ -32,19 +47,16 @@ const Categories = () => {
                   rounded-lg
                   text-white
                   cursor-pointer
+                  mt-10
                   "
                 >
                     <FaPlus size={17} />
                     <p>Add Categories</p>
                 </div>
             </div>
-            <div className='grid grid-cols-6 gap-4 my-4'>
-                {
-                    categoriesData?.data?.attributes?.map(category => <CategoriesCart key={category?._id} category={category} />)
-                }
-            </div>
+            {content}
         </div>
     );
-}
+};
 
 export default Categories;
